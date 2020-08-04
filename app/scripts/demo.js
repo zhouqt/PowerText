@@ -26,4 +26,4 @@
         $('#demoDiv').removeClass('active');
     });
 
-})(jQuery);
+})(ateJQ);

@@ -57,22 +57,23 @@ function html(cb) {
 }
 
 function chromeManifest(cb) {
-  return gulp.src('app/manifest.json')
+  var cwd = process.cwd();
+  return $.merge(gulp.src('app/manifest.json')
     .pipe($.chromeManifest({
-      buildnumber: true,
+      buildnumber: false,
       background: {
         target: 'scripts/background.js',
         exclude: [
           'scripts/chromereload.js'
         ]
       }
-  }))
+  })), gulp.src('app/scripts/options.js', {base:'app/'}))
   .pipe($.if('*.css', $.cleanCss({compatibility: '*'})))
   .pipe($.if(/^((?!(\.min)).)*\.js$/, $.removeLogging({methods:['log']})))
   .pipe($.if(/^((?!(\.min)).)*\.js$/, $.sourcemaps.init()))
   .pipe($.if(/^((?!(\.min)).)*\.js$/, $.uglify()))
   .pipe($.if(/^((?!(\.min)).)*\.js$/, $.sourcemaps.write('.')))
-  .pipe(gulp.dest('dist'));
+  .pipe(gulp.dest('dist', {cwd: cwd}));  
 }
 
 export function clean(cb) {
@@ -110,7 +111,7 @@ function wiredepInit(cb) {
 export function dist() {
   var manifest = require('./dist/manifest.json');
   return gulp.src('dist/**')
-      .pipe($.zip('ATE-' + manifest.version + '.zip'))
+      .pipe($.zip('PT-' + manifest.version + '.zip'))
       .pipe(gulp.dest('dist'));
 }
 

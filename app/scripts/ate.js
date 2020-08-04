@@ -21,9 +21,10 @@ var ateModule = (function($)
     , ENUM_CAPITALIZATION_FIRST = 1
     , ENUM_CAPITALIZATION_ALL = 2
 
-    , DATE_MACRO_REGEX = new RegExp(INSERT_DATE_TAG, 'g')
-    , CLIP_MACRO_REGEX = new RegExp(INSERT_CLIPBOARD_TAG, 'g')
-    , URL_MACRO_REGEX = new RegExp(INSERT_URL_TAG, 'g')
+    , DATE_MACRO_REGEX = new RegExp(ATE_CONST.INSERT_DATE_TAG, 'g')
+    , MDA_MACRO_REGEX = new RegExp(ATE_CONST.INSERT_MDA_TAG, 'g')
+    , CLIP_MACRO_REGEX = new RegExp(ATE_CONST.INSERT_CLIPBOARD_TAG, 'g')
+    , URL_MACRO_REGEX = new RegExp(ATE_CONST.INSERT_URL_TAG, 'g')
     , WHITESPACE_REGEX = /(\s)/
 
     , BASECAMP_DOMAIN_REGEX = /basecamp.com/
@@ -255,6 +256,9 @@ var ateModule = (function($)
 
         // Handle %url% macro
         autotext = processUrls(autotext);
+
+        // Handle mda
+        autotext = processMda(autotext, shortcut);
 
         // Adjust capitalization
         switch (capitalization)
@@ -930,6 +934,103 @@ var ateModule = (function($)
     return processedText.join('');
   }
 
+  // Process and replace ...
+  function processMda(text, shortcut)
+  { 
+    var mdaOpenTags = [], mdaCloseTags = [];
+
+    // Find all indices of opening tags
+    while (result = MDA_MACRO_REGEX.exec(text)) {
+      mdaOpenTags.push(result.index);
+    }
+
+    // Only continue if we have any tags
+    if (!mdaOpenTags.length) {
+      return text;
+    }
+
+    // Find matching closing tag for each date
+    for (var i = 0, len = mdaOpenTags.length; i < len; ++i) {
+      mdaCloseTags[i] = text.indexOf(
+        ATE_CONST.INSERT_MDA_CLOSE_TAG, mdaOpenTags[i] + 1);
+    }
+
+    // Only continue if we have matching tags
+    if (mdaOpenTags.length != mdaCloseTags.length) {
+      return text;
+    }
+
+    // Loop through and replace date tags with formatted text
+    var processedText = [text.slice(0, mdaOpenTags[0])];
+    for (var i = 0, len = mdaOpenTags.length; i < len; ++i)
+    {
+      var attribute = text.slice(mdaOpenTags[i] + 5, mdaCloseTags[i]);
+        
+      var inputTag = document.createElement('input');
+      inputTag.setAttribute('type', 'text');    
+      inputTag.setAttribute('id', 'ec_mdavalue');
+
+      document.body.appendChild(inputTag);
+
+      var scriptTag = document.createElement('script');
+      scriptTag.setAttribute('type', 'text/javascript');    
+      scriptTag.innerHTML = 
+       'if (window.Xrm) { ' +
+          'var split = "' + attribute + '".split(",");' +
+          'for (var i = 0; i < split.length; i++) {' +
+            'var attr = window.Xrm.Page.getAttribute(split[i]);console.log(split[i]);console.log(attr);' +
+            'if (attr) {' +
+              'var str = null;' +
+              'switch(attr.getAttributeType()) {' +
+                'case "multiselectoptionset":' +
+                'case "optionset":' +
+                  'str = attr.getText();' +
+                  'break;' +
+                'case "datetime":' +
+                  'switch(attr.getFormat()){' +
+                    'case "date":' +
+                      'str = attr.getValue().format(Xrm.Utility.getGlobalContext().userSettings.dateFormattingInfo.ShortDatePattern);' +
+                      'break;' +
+                    'case "datetime":' +
+                      'str = attr.getValue().format(Xrm.Utility.getGlobalContext().userSettings.dateFormattingInfo.FullDateTimePattern);' +
+                      'break;' +
+                  '}' +
+                  'break;' +
+                'case "lookup":' +
+                  'var val = attr.getValue();' +
+                  'if(val.length > 0) {' +
+                    'str = val[0].name;' +
+                  '}' +
+                  'break;' +
+                'default:' +
+                  'str = attr.getValue();' +
+                  'break;' +
+              '}' +
+              'document.getElementById("ec_mdavalue").value = str;' +
+              'break;' +
+            '}' +
+          '}' +
+        '}'
+        console.log(scriptTag.innerHTML);
+      document.body.appendChild(scriptTag);
+
+      var mdaValue = document.getElementById('ec_mdavalue');
+
+      if (mdaValue && mdaValue.value) {
+        processedText.push(mdaValue.value);
+      } else {
+        processedText.push(shortcut);
+      }
+
+      mdaValue.remove();        
+      inputTag.remove();
+      scriptTag.remove();
+    }
+
+    // Return processed dates
+    return processedText.join('');
+  }
+
   // Get what's stored in the clipboard
   function getClipboardData(completionBlock) {
     chrome.runtime.sendMessage({
@@ -1224,4 +1325,4 @@ var ateModule = (function($)
 })(ateJQ);
 
 // Document ready
-$(ateModule.init);
+ateJQ(ateModule.init);

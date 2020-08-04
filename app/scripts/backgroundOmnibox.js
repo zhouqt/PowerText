@@ -29,7 +29,7 @@ function omniboxActivated() {
 function omniboxInput(text, suggest)
 {
   console.log('Omnibox onInputChanged:', text);
-  var expansion = shortcutCache[SHORTCUT_PREFIX + text]; // Use text to check shortcuts for expansions
+  var expansion = shortcutCache[ATE_CONST.SHORTCUT_PREFIX + text]; // Use text to check shortcuts for expansions
   if (expansion && expansion.length) // If exists, use expansion as suggestion
   {
     var suggestions = [];

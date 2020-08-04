@@ -89,6 +89,7 @@ function processVersionUpgrade(oldVersion)
     var upgradeNotes = [];   // Upgrade version notes
     switch (oldVersion)
     {
+      /*
       case '1.1.6':
       case '1.1.5':
       case '1.1.4':
@@ -158,7 +159,7 @@ function processVersionUpgrade(oldVersion)
         // Upgrade database to latest version and supply version notes
         upgradeShortcutsToLatest(upgradeNotes);
         break;
-
+*/
       default:
         console.log('unexpected version number:', oldVersion);
         break;

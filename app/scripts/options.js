@@ -73,8 +73,9 @@ var ateOptionsModule = (function($)
     $('#cursorTag').text(ATE_CONST.CURSOR_TRACKING_HTML);
     $('#clipboardTag').text(ATE_CONST.INSERT_CLIPBOARD_TAG);
     $('#insertUrlTag').text(ATE_CONST.INSERT_URL_TAG);
-    $('#insertDateTag').text(ATE_CONST.INSERT_DATE_TAG + 'dateformat' + ATE_CONST.INSERT_DATE_CLOSE_TAG);
-    $('#insertDateFormat').text(ATE_CONST.INSERT_DATE_TAG + DATE_MACRO_DEMO_FORMAT + ATE_CONST.INSERT_DATE_CLOSE_TAG);
+    $('#insertMDATag').text(ATE_CONST.INSERT_MDA_TAG.replace('\\', '') + 'attribute_logical_name[,fallback_attribute ...]' + ATE_CONST.INSERT_MDA_CLOSE_TAG.replace('\\', ''));
+    $('#insertDateTag').text(ATE_CONST.INSERT_DATE_TAG.replace('\\', '') + 'dateformat' + ATE_CONST.INSERT_DATE_CLOSE_TAG.replace('\\', ''));
+    $('#insertDateFormat').text(ATE_CONST.INSERT_DATE_TAG.replace('\\', '') + DATE_MACRO_DEMO_FORMAT + ATE_CONST.INSERT_DATE_CLOSE_TAG.replace('\\', ''));
     $('#insertDateDemo').text((function(){
       var mo = moment();
       mo.locale(chrome.i18n.getMessage('@@ui_locale'));
@@ -540,7 +541,7 @@ var ateOptionsModule = (function($)
       if (validateRow($row))
       {
         // If pair is valid, and no duplicates, add to list
-        var shortcut = SHORTCUT_PREFIX + $row.find('.shortcut').val();
+        var shortcut = ATE_CONST.SHORTCUT_PREFIX + $row.find('.shortcut').val();
         if (!data[shortcut]) {
           data[shortcut] = $row.find('.autotext').val();
         } else {
