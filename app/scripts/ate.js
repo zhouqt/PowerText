@@ -975,10 +975,11 @@ var ateModule = (function($)
       var scriptTag = document.createElement('script');
       scriptTag.setAttribute('type', 'text/javascript');    
       scriptTag.innerHTML = 
-       'if (window.Xrm) { ' +
+       'var xrm = window.top.Xrm;' +
+       'if (xrm) { ' +
           'var split = "' + attribute + '".split(",");' +
           'for (var i = 0; i < split.length; i++) {' +
-            'var attr = window.Xrm.Page.getAttribute(split[i]);console.log(split[i]);console.log(attr);' +
+            'var attr = xrm.Page.getAttribute(split[i]);console.log(split[i]);console.log(attr);' +
             'if (attr) {' +
               'var str = null;' +
               'switch(attr.getAttributeType()) {' +
@@ -1324,5 +1325,13 @@ var ateModule = (function($)
   };
 })(ateJQ);
 
-// Document ready
-ateJQ(ateModule.init);
+if(window.self !== window.top) {
+  //delay loading in iframes - this helps with ckeditor
+  setTimeout(function() {
+    // Document ready
+    ateJQ(ateModule.init);
+  }, 500);
+} else {
+  // Document ready
+  ateJQ(ateModule.init);
+}
