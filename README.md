@@ -15,6 +15,7 @@ https://chrome.google.com/webstore/detail/power-text-for-google-chr/abbedfhgcpfn
 v1.1.0
  - Support for notes in Power Platform Model-driven Apps
  - Settings page opens in new tab (for better Microsoft Edge support)
+ 
 v1.0.0
  - First build, based on Auto Text Expander v2.0.0 (https://github.com/carlinyuen/ChromeAutoTextExpander)
 
