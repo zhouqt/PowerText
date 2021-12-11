@@ -13,9 +13,9 @@ var ATE_CONST = {
   , INSERT_CLIPBOARD_TAG: '%clip%'   // Tag to paste clipboard contents in
   , INSERT_URL_TAG: '%url%'          // Tag to insert current URL in
   , INSERT_DATE_TAG: '%d\\('           // Tag to insert date from moment.js
-  , INSERT_DATE_CLOSE_TAG: '\\)'       // Closing tag for insert-date
+  , INSERT_DATE_CLOSE_TAG: ')'       // Closing tag for insert-date
   , INSERT_MDA_TAG: '%mda\\('           // Tag to ...
-  , INSERT_MDA_CLOSE_TAG: '\\)'       // Closing tag ... 
+  , INSERT_MDA_CLOSE_TAG: ')'       // Closing tag ... 
   , CURSOR_TRACKING_TAG: '?atec?'    // Way to track cursor location
 };
 ATE_CONST.CURSOR_TRACKING_HTML =     // HTML to insert into expansion
