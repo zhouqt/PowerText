@@ -993,12 +993,9 @@ var ateOptionsModule = (function($)
               var importedData = e.target.result;
               try {
                 var parsedData = JSON.parse(importedData);
-                console.log('Imported Data:', parsedData); // Debug: Log imported data
-                // Here you would typically merge or replace the current shortcuts
                 $.each(parsedData, function(key, value) {
                   var storageObject = {};
                   storageObject[ATE_CONST.SHORTCUT_PREFIX + key] = value;
-                  console.log('Setting:', storageObject); // Debug: Log each key-value pair being set
                   chrome.storage.sync.set(storageObject, function() {
                     if (chrome.runtime.lastError) {
                       console.error(chrome.runtime.lastError);
@@ -1012,7 +1009,6 @@ var ateOptionsModule = (function($)
                   completionBlock(parsedData);
                 }
               } catch (error) {
-                console.error(error);
                 showCrouton('Invalid JSON file!', 'red');
               }
             };
