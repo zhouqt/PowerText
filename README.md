@@ -12,6 +12,9 @@ Chrome Webstore Link:
 https://chrome.google.com/webstore/detail/power-text-for-google-chr/abbedfhgcpfnmhonjhdlmndigalhandb?hl=en-US
 
 ## Version History
+v1.3.0
+ - Fix for invalid JSON format
+
 v1.2.0
  - Fix for date shortcut not being removed when text is expanded (as reported by Ryan Benefiel)
 
