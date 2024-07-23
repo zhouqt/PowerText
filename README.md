@@ -12,6 +12,10 @@ Chrome Webstore Link:
 https://chrome.google.com/webstore/detail/power-text-for-google-chr/abbedfhgcpfnmhonjhdlmndigalhandb?hl=en-US
 
 ## Version History
+v1.4.0
+ - Implementing import and export functionality
+ - Adding support for expanding in spans for LiveChat
+
 v1.3.0
  - Fix for invalid JSON format
 
